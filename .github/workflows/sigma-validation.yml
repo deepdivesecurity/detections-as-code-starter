@@ -32,4 +32,4 @@ jobs:
 
       - name: Test SIEM Translation (Smoke Test)
         run: |
-          sigma convert -t microsoft-sentinel -p sysmon ./rules/
+          sigma convert -t kusto -p sentinel_asim -s ./rules/
