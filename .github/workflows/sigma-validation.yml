@@ -24,7 +24,7 @@ jobs:
       - name: Install Sigma CLI and Plugins
         run: |
           pip install sigma-cli
-          sigma plugin install microsoft-sentinel
+          sigma plugin install kusto
 
       - name: Validate Rule Logic (sigma check)
         run: |
