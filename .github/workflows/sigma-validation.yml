@@ -2,9 +2,6 @@ name: Validate Sigma rules
 
 on: [push, pull_request, merge_group, workflow_dispatch]
 
-env:
-  SIGMA_RULE_SCHEMA_VERSION: v2.1.0
-
 jobs:
   sigma-rules-validator:
     runs-on: ubuntu-latest
