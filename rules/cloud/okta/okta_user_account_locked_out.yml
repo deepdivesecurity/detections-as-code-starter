@@ -14,6 +14,7 @@ tags:
 logsource:
     product: okta
     service: okta
+    category: application
 detection:
     selection:
         displaymessage: Max sign in attempts exceeded
