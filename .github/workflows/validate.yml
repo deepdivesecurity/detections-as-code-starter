@@ -59,3 +59,17 @@ jobs:
       - name: Validate Rule Logic (sigma check)
         run: |
           sigma check ./rules
+
+      - name: Convert Sigma Rules to Kusto
+        run: |
+          find rules -type f \( -name "*.yml" -o -name "*.yaml" \) -print0 |
+          while IFS= read -r -d '' rule
+          do
+              echo "Testing: ${rule}"
+
+              sigma convert \
+                -t kusto \
+                -p sentinel_asim \
+                "${rule}" \
+                >/dev/null
+          done
