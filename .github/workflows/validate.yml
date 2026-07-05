@@ -69,7 +69,7 @@ jobs:
 
               sigma convert \
                 -t kusto \
-                -p sentinel_asim \
+                -p pipelines/sentinel.yml \
                 "${rule}" \
                 >/dev/null
           done

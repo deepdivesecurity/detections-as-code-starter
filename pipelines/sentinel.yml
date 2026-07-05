@@ -1,0 +1,10 @@
+name: sentinel
+
+fieldmappings: {}
+
+logsource_mappings:
+  product:
+    okta: Okta_CL
+    windows: SecurityEvent
+    azure: AzureActivity
+    office365: OfficeActivity
