@@ -42,7 +42,7 @@ jobs:
 
       - name: Validate YAML files
         run: |
-          yamllint rules/**/*.yml
+          yamllint ./rules/*.yml
 
       - name: Validate Sigma schema
         uses: SigmaHQ/sigma-rules-validator@v1
