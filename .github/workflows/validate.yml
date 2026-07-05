@@ -69,7 +69,8 @@ jobs:
 
               sigma convert \
                 -t kusto \
-                -p pipelines/sentinel.yml \
+                -p sentinel_asim \
+                --query-table Okta_CL \
                 "${rule}" \
                 >/dev/null
           done
