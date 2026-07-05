@@ -1,0 +1,2 @@
+sigma-cli==3.0.3
+yamllint==1.38.0

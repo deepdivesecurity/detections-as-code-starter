@@ -9,6 +9,7 @@ Contains the GitHub Actions workflow for detection-as-code transpilation from Si
 ## Features
 
 - Sigma -> SIEM rule transpilation
+- Sigma schema validation
 - Automated CI/CD pipeline deployment
 
 ## Environment Variables

@@ -1,0 +1,61 @@
+name: Validate Sigma rules
+
+on: 
+  pull_request: 
+    paths: 
+      - "rules/**"
+      - ".github/workflows/**"
+  
+  push: 
+    branches: 
+      - main
+    paths: 
+      - "rules/**"
+      - ".github/workflows/**"
+
+  merge_group:
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Schema & YAML Validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements-dev.txt
+
+      - name: Validate YAML files
+        run: |
+          yamllint rules/**/*.yml
+
+      - name: Validate Sigma schema
+        uses: SigmaHQ/sigma-rules-validator@v1
+        with:
+          paths: |-
+            ./rules
+          schemaURL: https://raw.githubusercontent.com/SigmaHQ/sigma-specification/refs/heads/main/json-schema/sigma-detection-rule-schema.json
+      
+      - name: Install Sigma CLI and Plugins
+        run: |
+          sigma plugin install kusto
+          sigma plugin list
+
+      - name: Validate Rule Logic (sigma check)
+        run: |
+          sigma check ./rules
