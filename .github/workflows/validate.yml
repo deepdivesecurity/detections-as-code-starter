@@ -70,7 +70,6 @@ jobs:
               sigma convert \
                 -t kusto \
                 -p sentinel_asim \
-                --query-table Okta_CL \
                 "${rule}" \
                 >/dev/null
           done
