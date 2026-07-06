@@ -58,9 +58,8 @@ jobs:
           sigma check ./rules
 
       - name: Convert Sigma Rules to Kusto
-        env: 
-          SIGMA_BACKEND_CONFIG: mappings/sentinel.yml
         run: |
+          python scripts/apply_mapping.py rules/ mappings/sentinel.py
           find rules -type f \( -name "*.yml" -o -name "*.yaml" \) -print0 |
           while IFS= read -r -d '' rule
           do
