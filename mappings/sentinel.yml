@@ -1,0 +1,11 @@
+name: sentinel-mapping
+
+fieldmappings: {}
+
+logsource:
+  product:
+    okta: Okta_CL
+    azure: AzureActivity
+    windows: SecurityEvent
+    o365: OfficeActivity
+    aws: AWSCloudTrail

@@ -39,6 +39,8 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
+          sigma plugin install kusto
+          sigma plugin list
 
       - name: Validate YAML files
         run: |
@@ -50,17 +52,14 @@ jobs:
           paths: |-
             ./rules
           schemaURL: https://raw.githubusercontent.com/SigmaHQ/sigma-specification/refs/heads/main/json-schema/sigma-detection-rule-schema.json
-      
-      - name: Install Sigma CLI and Plugins
-        run: |
-          sigma plugin install kusto
-          sigma plugin list
 
       - name: Validate Rule Logic (sigma check)
         run: |
           sigma check ./rules
 
       - name: Convert Sigma Rules to Kusto
+        env: 
+          SIGMA_BACKEND_CONFIG: mappings/sentinel.yml
         run: |
           find rules -type f \( -name "*.yml" -o -name "*.yaml" \) -print0 |
           while IFS= read -r -d '' rule
