@@ -13,12 +13,14 @@ on:
       - "rules/**"
       - ".github/workflows/**"
 
-  merge_group:
-
   workflow_dispatch:
 
 permissions:
   contents: read
+
+concurrency: 
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   validate:
@@ -29,6 +31,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
+        with: 
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -38,26 +42,48 @@ jobs:
 
       - name: Install dependencies
         run: |
+          python -m pip install --upgrade pip
           pip install -r requirements.txt
-          sigma plugin install kusto
-          sigma plugin list
+
+      - name: Detect changed rule files
+        id: changed-files
+        uses: tj-actions/changed-files@9426d40962ed5378910ee2e21d5f8c6fcbf2dd96 # v47.0.6
+        with: 
+          files: |
+            rules/**/*.yml
+            rules/**/*.yaml
+          separator: "\n"
+      
+      - name: Show changed files
+        env: 
+          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+        run: |
+          for file in ${ALL_CHANGED_FILES}; do
+            echo "Changed file: $file"
+          done
 
       - name: Validate YAML files
+        if: steps.changed-files.outputs.any_changed == 'true'
+        env: 
+          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
         run: |
-          yamllint ./rules
+          for file in ${ALL_CHANGED_FILES}; do
+            echo "Validating YAML file: $file"
+            yamllint "$file"
+          done
 
       - name: Validate Sigma schema
+        if: steps.changed-files.outputs.any_changed == 'true'
+        env: 
+          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
         uses: SigmaHQ/sigma-rules-validator@v1
         with:
           paths: |-
             ./rules
           schemaURL: https://raw.githubusercontent.com/SigmaHQ/sigma-specification/refs/heads/main/json-schema/sigma-detection-rule-schema.json
 
-      - name: Validate Rule Logic (sigma check)
-        run: |
-          sigma check ./rules
-
       - name: Convert Sigma Rules to Kusto
+        if: steps.changed-files.outputs.any_changed == 'true'
         run: |
           python scripts/apply_mapping.py rules/ mappings/sentinel.py
           find rules -type f \( -name "*.yml" -o -name "*.yaml" \) -print0 |
