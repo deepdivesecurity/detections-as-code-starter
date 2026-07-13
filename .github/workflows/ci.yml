@@ -89,7 +89,7 @@ jobs:
           for file in ${ALL_CHANGED_FILES}; do
             base=$(basename "$file")
             stem="${base%.*}"
-            sigma convert -t kusto -p sentinel_asim "$file" > "out/kql/${stem}.kql" 2> "out/kql/${stem}.log"
+            sigma convert -t kusto "$file" > "out/kql/${stem}.kql" 2> "out/kql/${stem}.log"
           done
 
       - name: Upload KQL artifacts
