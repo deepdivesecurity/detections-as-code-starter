@@ -86,11 +86,11 @@ jobs:
         env:
           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
         run: |
-          mkdir -p /KQL
+          mkdir -p out/KQL
           for file in ${ALL_CHANGED_FILES}; do
             base=$(basename "$file")
             stem="${base%.*}"
-            sigma convert -t kusto "$file" > "/KQL/${stem}.kql" 2> "/KQL/${stem}.log"
+            sigma convert -t kusto "$file" > "out/KQL/${stem}.kql" 2> "out/KQL/${stem}.log"
           done
 
       - name: Create Pull Request
