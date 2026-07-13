@@ -77,7 +77,7 @@ jobs:
         uses: SigmaHQ/sigma-rules-validator@v1
         with:
           paths: |-
-            ${{ steps.changed-files.outputs.all_changed_files }}
+            ./rules
           schemaURL: https://raw.githubusercontent.com/SigmaHQ/sigma-specification/refs/heads/main/json-schema/sigma-detection-rule-schema.json
 
       - name: Convert Sigma Rules to Kusto
