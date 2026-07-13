@@ -74,26 +74,27 @@ jobs:
 
       - name: Validate Sigma schema
         if: steps.changed-files.outputs.any_changed == 'true'
-        env: 
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
         uses: SigmaHQ/sigma-rules-validator@v1
         with:
           paths: |-
-            ./rules
+            ${{ steps.changed-files.outputs.all_changed_files }}
           schemaURL: https://raw.githubusercontent.com/SigmaHQ/sigma-specification/refs/heads/main/json-schema/sigma-detection-rule-schema.json
 
       - name: Convert Sigma Rules to Kusto
         if: steps.changed-files.outputs.any_changed == 'true'
+        env:
+          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
         run: |
-          python scripts/apply_mapping.py rules/ mappings/sentinel.py
-          find rules -type f \( -name "*.yml" -o -name "*.yaml" \) -print0 |
-          while IFS= read -r -d '' rule
-          do
-              echo "Testing: ${rule}"
-
-              sigma convert \
-                -t kusto \
-                -p sentinel_asim \
-                "${rule}" \
-                >/dev/null
+          mkdir -p out/kql
+          for file in ${ALL_CHANGED_FILES}; do
+            base=$(basename "$file")
+            stem="${base%.*}"
+            sigma convert -t kusto -p sentinel_asim "$file" > "out/kql/${stem}.kql" 2> "out/kql/${stem}.log"
           done
+
+      - name: Upload KQL artifacts
+        if: steps.changed-files.outputs.any_changed == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: converted-kql
+          path: out/kql
