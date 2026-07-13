@@ -1,4 +1,4 @@
-name: Validate Sigma rules
+name: CI
 
 on: 
   pull_request: 
@@ -16,7 +16,8 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
+  pull-requests: write
 
 concurrency: 
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -89,12 +90,33 @@ jobs:
           for file in ${ALL_CHANGED_FILES}; do
             base=$(basename "$file")
             stem="${base%.*}"
-            sigma convert -t kusto "$file" > "out/kql/${stem}.kql" 2> "out/kql/${stem}.log"
+            sigma convert -t kusto "$file" > "/KQL/${stem}.kql" 2> "/KQL/${stem}.log"
           done
 
-      - name: Upload KQL artifacts
+      - name: Create Pull Request
         if: steps.changed-files.outputs.any_changed == 'true'
-        uses: actions/upload-artifact@v4
+        uses: peter-evans/create-pull-request@v8
         with:
-          name: converted-kql
-          path: out/kql
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'chore: update KQL rules from latest Sigma rules'
+          branch: update-sigma-rules-${{ github.run_number }}
+          delete-branch: true
+          title: 'Update KQL Rules from Sigma Repository'
+          body: |
+            ## Automated Sigma to KQL Conversion
+            
+            This PR contains updated KQL rules converted from the latest Sigma rules repository.
+            
+            ### Changes
+            - Updated KQL rules
+            - Conversion date: ${{ github.event.repository.updated_at }}
+            - Workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            
+            ### Review Checklist
+            - [ ] Review changed rules for accuracy
+            - [ ] Verify new rules are properly formatted
+            - [ ] Check for any failed conversions in workflow logs
+            
+            ---
+            *This PR was automatically created by the CI workflow.*
+          reviewers: ${{ github.repository_owner }}
