@@ -4,7 +4,7 @@ Contains the GitHub Actions workflow for detection-as-code transpilation from Si
 
 ## Badges
 
-- TBD
+[![CI](https://github.com/deepdivesecurity/detections-as-code-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/deepdivesecurity/detections-as-code-starter/actions/workflows/ci.yml)
 
 ## Features
 
