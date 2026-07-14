@@ -83,7 +83,7 @@ jobs:
             ./rules
           schemaURL: https://raw.githubusercontent.com/SigmaHQ/sigma-specification/refs/heads/main/json-schema/sigma-detection-rule-schema.json
 
-      - name: Convert Sigma Rules to Kusto
+      - name: Convert Sigma Rules
         if: steps.changed-files.outputs.any_changed == 'true'
         env:
           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
@@ -113,7 +113,8 @@ jobs:
               output_dir="converted_rules/${backend}/$rel_dir"
               mkdir -p "$output_dir"
 
-              sigma convert -t "$backend" "$file" > "$output_dir/${stem}.${ext}" 2> "$output_dir/${stem}.log"
+              echo "Converting $file to $backend format..."
+              sigma convert -t "$backend" "$file" > "$output_dir/${stem}.${ext}"
             done
           done
 
