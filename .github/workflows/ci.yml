@@ -88,19 +88,19 @@ jobs:
         env:
           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
         run: |
-          mkdir -p rules/KQL
+          mkdir -p converted_rules/KQL
           for file in ${ALL_CHANGED_FILES}; do
             base=$(basename "$file")
             stem="${base%.*}"
-            sigma convert -t kusto "$file" > "rules/KQL/${stem}.kql" 2> "rules/KQL/${stem}.log"
+            sigma convert -t kusto "$file" > "converted_rules/KQL/${stem}.kql" 2> "converted_rules/KQL/${stem}.log"
           done
 
       - name: Keep only specific directory changes
         if: steps.changed-files.outputs.any_changed == 'true'
         run: |
           git restore --source=HEAD --staged --worktree -- .
-          git clean -fdx -e rules/KQL/
-          git add rules/KQL
+          git clean -fdx -e converted_rules/KQL/
+          git add converted_rules/KQL
 
       - name: Create Pull Request
         if: steps.changed-files.outputs.any_changed == 'true'
