@@ -103,7 +103,6 @@ jobs:
           commit-message: 'chore: update KQL rules from latest Sigma rules'
           branch: update-sigma-rules-${{ github.run_number }}
           delete-branch: true
-          draft: true
           title: 'Update KQL Rules from Sigma Repository'
           body: |
             ## Automated Sigma to KQL Conversion
