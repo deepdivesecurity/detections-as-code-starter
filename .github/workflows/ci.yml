@@ -114,8 +114,10 @@ jobs:
               mkdir -p "$output_dir"
 
               if [[ "backend" == "kusto" ]]; then
-                sigma convert -t "$backend" "$file" > "$output_dir/${stem}.${ext}"
+                echo "Converting $file to Kusto format..."
+                sigma convert -t "$backend" -p "sentinel_asim" "$file" > "$output_dir/${stem}.${ext}"
               elif [[ "backend" == "log_scale" ]]; then
+                echo "Converting $file to LogScale format..."
                 sigma convert -t "$backend" -p "log_scale" "$file" > "$output_dir/${stem}.${ext}"
               fi
             done
@@ -136,14 +138,14 @@ jobs:
           commit-message: 'chore: update KQL rules from latest Sigma rules'
           branch: update-sigma-rules-${{ github.run_number }}
           delete-branch: true
-          title: 'Update KQL Rules from Sigma Repository'
+          title: 'Update Rules from Sigma Repository'
           body: |
-            ## Automated Sigma to KQL Conversion
+            ## Automated Sigma Conversion
             
-            This PR contains updated KQL rules converted from the latest Sigma rules repository.
+            This PR contains updated rules converted from the latest Sigma rules repository.
             
             ### Changes
-            - Updated KQL rules
+            - Updated rules
             - Conversion date: ${{ github.event.repository.updated_at }}
             - Workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
             
