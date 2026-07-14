@@ -110,10 +110,11 @@ jobs:
                   ;;
               esac
 
-            output_dir="converted_rules/${backend}/$rel_dir"
-            mkdir -p "$output_dir"
+              output_dir="converted_rules/${backend}/$rel_dir"
+              mkdir -p "$output_dir"
 
-            sigma convert -t "$backend" "$file" > "$output_dir/${stem}.${ext}" 2> "$output_dir/${stem}.log"
+              sigma convert -t "$backend" "$file" > "$output_dir/${stem}.${ext}" 2> "$output_dir/${stem}.log"
+            done
           done
 
       - name: Keep only specific directory changes
