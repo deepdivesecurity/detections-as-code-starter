@@ -96,13 +96,13 @@ jobs:
             base=$(basename "$rel_path")
             stem="${base%.*}"
 
-            for backend in kusto log_scale; do
+            for backend in kusto crowdstrike; do
               case "$backend" in
                 kusto)
                   ext="kql"
                   ;;
-                log_scale)
-                  ext="logscale"
+                crowdstrike)
+                  ext=".json"
                   ;;
                 *)
                   echo "Unsupported backend: $backend"
