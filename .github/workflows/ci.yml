@@ -102,7 +102,7 @@ jobs:
                   ext="kql"
                   ;;
                 log_scale)
-                  ext=".json"
+                  ext=".csql"
                   ;;
                 *)
                   echo "Unsupported backend: $backend"
