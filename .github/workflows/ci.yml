@@ -95,6 +95,12 @@ jobs:
             sigma convert -t kusto "$file" > "out/KQL/${stem}.kql" 2> "out/KQL/${stem}.log"
           done
 
+      - name: Keep only specific directory changes
+        run: |
+          git restore --source=HEAD --staged --worktree -- .
+          git clean -fdx -e out/KQL/
+          git add out/KQL
+
       - name: Create Pull Request
         if: steps.changed-files.outputs.any_changed == 'true'
         uses: peter-evans/create-pull-request@v8
