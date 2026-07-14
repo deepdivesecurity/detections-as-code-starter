@@ -102,20 +102,22 @@ jobs:
                   ext="kql"
                   ;;
                 log_scale)
-                  ext="json"
+                  ext="logscale"
                   ;;
                 *)
-                  echo "Unsupported backend: $backend"
+                  echo "Unspported backend: $backend"
                   exit 1
                   ;;
               esac
 
-              output_dir="converted_rules/${backend}/$rel_dir"
+              output_dir="converted_rules/${backend}/${rel_dir}"
               mkdir -p "$output_dir"
 
-              echo "Converting $file to $backend format..."
-              sigma convert -t "$backend" "$file" > "$output_dir/${stem}.${ext}"
-            done
+              if [[ "backend" == "kusto" ]]; then
+                sigma convert -t "$backend" "$file" > "$output_dir/${stem}.${ext}"
+              elif [[ "backend" == "log_scale" ]]; then
+                sigma convert -t "$backend" -p "log_scale" "$file" > "$output_dir/${stem}.${ext}"
+              fi
           done
 
       - name: Keep only specific directory changes
