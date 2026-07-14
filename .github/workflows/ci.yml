@@ -125,8 +125,8 @@ jobs:
         if: steps.changed-files.outputs.any_changed == 'true'
         run: |
           git restore --source=HEAD --staged --worktree -- .
-          git clean -fdx -e converted_rules/KQL/
-          git add converted_rules/KQL
+          git clean -fdx -e converted_rules/
+          git add converted_rules
 
       - name: Create Pull Request
         if: steps.changed-files.outputs.any_changed == 'true'
