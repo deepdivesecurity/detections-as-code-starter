@@ -96,12 +96,12 @@ jobs:
             base=$(basename "$rel_path")
             stem="${base%.*}"
 
-            for backend in kusto crowdstrike; do
+            for backend in kusto log_scale; do
               case "$backend" in
                 kusto)
                   ext="kql"
                   ;;
-                crowdstrike)
+                log_scale)
                   ext=".json"
                   ;;
                 *)
@@ -116,9 +116,9 @@ jobs:
               if [[ $backend == "kusto" ]]; then
                 echo "Converting $file to Kusto format..."
                 sigma convert -t "$backend" "$file" > "$output_dir/${stem}.${ext}"
-              elif [[ $backend == "crowdstrike" ]]; then
+              elif [[ $backend == "log_scale" ]]; then
                 echo "Converting $file to CrowdStrike format..."
-                sigma convert -t "$backend" -p "log_scale" "$file" > "$output_dir/${stem}.${ext}"
+                sigma convert -t "$backend" -p "crowdstrike_falcon" "$file" > "$output_dir/${stem}.${ext}"
               fi
             done
           done
