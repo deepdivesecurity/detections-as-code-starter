@@ -116,8 +116,8 @@ jobs:
               if [[ $backend == "kusto" ]]; then
                 echo "Converting $file to Kusto format..."
                 sigma convert -t "$backend" "$file" > "$output_dir/${stem}.${ext}"
-              elif [[ $backend == "log_scale" ]]; then
-                echo "Converting $file to LogScale format..."
+              elif [[ $backend == "crowdstrike" ]]; then
+                echo "Converting $file to CrowdStrike format..."
                 sigma convert -t "$backend" -p "log_scale" "$file" > "$output_dir/${stem}.${ext}"
               fi
             done
