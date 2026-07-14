@@ -96,12 +96,12 @@ jobs:
             base=$(basename "$rel_path")
             stem="${base%.*}"
 
-            for backend in kusto crowdstrike; do
+            for backend in kusto log_scale; do
               case "$backend" in
                 kusto)
                   ext="kql"
                   ;;
-                crowdstrike)
+                log_scale)
                   ext="json"
                   ;;
                 *)
