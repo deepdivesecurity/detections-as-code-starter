@@ -105,7 +105,7 @@ jobs:
                   ext="logscale"
                   ;;
                 *)
-                  echo "Unspported backend: $backend"
+                  echo "Unsupported backend: $backend"
                   exit 1
                   ;;
               esac
@@ -113,10 +113,10 @@ jobs:
               output_dir="converted_rules/${backend}/${rel_dir}"
               mkdir -p "$output_dir"
 
-              if [[ "backend" == "kusto" ]]; then
+              if [[ $backend == "kusto" ]]; then
                 echo "Converting $file to Kusto format..."
                 sigma convert -t "$backend" -p "sentinel_asim" "$file" > "$output_dir/${stem}.${ext}"
-              elif [[ "backend" == "log_scale" ]]; then
+              elif [[ $backend == "log_scale" ]]; then
                 echo "Converting $file to LogScale format..."
                 sigma convert -t "$backend" -p "log_scale" "$file" > "$output_dir/${stem}.${ext}"
               fi
