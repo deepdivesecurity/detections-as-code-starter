@@ -88,11 +88,32 @@ jobs:
         env:
           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
         run: |
-          mkdir -p converted_rules/KQL
+          mkdir -p converted_rules
+
           for file in ${ALL_CHANGED_FILES}; do
-            base=$(basename "$file")
+            rel_path="${file#rules/}"
+            rel_dir=$(dirname "$rel_path")
+            base=$(basename "$rel_path")
             stem="${base%.*}"
-            sigma convert -t kusto "$file" > "converted_rules/KQL/${stem}.kql" 2> "converted_rules/KQL/${stem}.log"
+
+            for backend in kusto crowdstrike; do
+              case "$backend" in
+                kusto)
+                  ext="kql"
+                  ;;
+                crowdstrike)
+                  ext="json"
+                  ;;
+                *)
+                  echo "Unsupported backend: $backend"
+                  exit 1
+                  ;;
+              esac
+
+            output_dir="converted_rules/${backend}/$rel_dir"
+            mkdir -p "$output_dir"
+
+            sigma convert -t "$backend" "$file" > "$output_dir/${stem}.${ext}" 2> "$output_dir/${stem}.log"
           done
 
       - name: Keep only specific directory changes
