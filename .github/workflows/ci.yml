@@ -96,6 +96,7 @@ jobs:
           done
 
       - name: Keep only specific directory changes
+        if: steps.changed-files.outputs.any_changed == 'true'
         run: |
           git restore --source=HEAD --staged --worktree -- .
           git clean -fdx -e rules/KQL/
