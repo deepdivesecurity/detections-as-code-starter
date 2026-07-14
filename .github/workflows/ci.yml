@@ -118,6 +118,7 @@ jobs:
               elif [[ "backend" == "log_scale" ]]; then
                 sigma convert -t "$backend" -p "log_scale" "$file" > "$output_dir/${stem}.${ext}"
               fi
+            done
           done
 
       - name: Keep only specific directory changes
