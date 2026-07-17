@@ -27,10 +27,17 @@ jobs:
       name: staging
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           fetch-depth: 0
+      
+      - name: Download build artifact
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: converted-rules
 
-      - name: Deploy to staging
+      - name: Deploy to Staging
         run: |
-          echo "Deploying Sigma rules to staging placeholder"
+          unzip converted-rules.zip
+          echo "Deploying converted-rules to staging..."
+          # Add deployment here
