@@ -1,12 +1,13 @@
 name: Deploy to Staging
 
 on:
-  push:
+  workflow_run:
+    workflows:
+      - CI
+    types:
+      - completed
     branches:
       - main
-    paths:
-      - "rules/**"
-      - ".github/workflows/**"
 
   workflow_dispatch:
 
@@ -19,6 +20,7 @@ concurrency:
 
 jobs:
   deploy:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     name: Deploy Sigma rules to staging
     runs-on: ubuntu-latest
     environment:
@@ -26,7 +28,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
-        with: 
+        with:
           fetch-depth: 0
 
       - name: Deploy to staging
