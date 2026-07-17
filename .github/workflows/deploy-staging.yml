@@ -1,0 +1,35 @@
+name: Deploy to Staging
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "rules/**"
+      - ".github/workflows/**"
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Deploy Sigma rules to staging
+    runs-on: ubuntu-latest
+    environment:
+      name: staging
+      url: https://staging.example.com
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with: 
+          fetch-depth: 0
+
+      - name: Deploy to staging
+        run: |
+          echo "Deploying Sigma rules to staging placeholder"
