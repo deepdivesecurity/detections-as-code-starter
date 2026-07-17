@@ -6,10 +6,12 @@ Contains the GitHub Actions workflow for detection-as-code transpilation from Si
 
 [![CI](https://github.com/deepdivesecurity/detections-as-code-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/deepdivesecurity/detections-as-code-starter/actions/workflows/ci.yml)
 
+
 ## Features
 
-- Sigma -> SIEM rule transpilation
+- Sigma -> SIEM rule transpilation (Currently set to Microsoft Sentinel & CrowdStrike)
 - Sigma schema validation
+- YAML linting
 - Automated CI/CD pipeline deployment
 
 ## Environment Variables
@@ -19,4 +21,4 @@ To run this pipeline, you will need to add the following environment variables t
 
 ## Usage/Examples
 
-- TBD
+- To automatically lint, test, and deploy a vendor-agnostic DaC rule-base (Sigma) to multiple destinations (e.g. Microsoft Sentinel; CrowdStrike; Splunk; etc.)
