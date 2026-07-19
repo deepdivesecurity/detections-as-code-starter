@@ -6,7 +6,7 @@ Contains the GitHub Actions workflow for detection-as-code transpilation from Si
 
 [![CI](https://github.com/deepdivesecurity/detections-as-code-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/deepdivesecurity/detections-as-code-starter/actions/workflows/ci.yml)
 
-[![Deploy to Staging](https://github.com/deepdivesecurity/detections-as-code-starter/actions/workflows/deploy-staging.yml/badge.svg)](https://github.com/deepdivesecurity/detections-as-code-starter/actions/workflows/deploy-staging.yml)
+[![CD](https://github.com/deepdivesecurity/detections-as-code-starter/actions/workflows/cd.yml/badge.svg)](https://github.com/deepdivesecurity/detections-as-code-starter/actions/workflows/cd.yml)
 
 
 ## Features
